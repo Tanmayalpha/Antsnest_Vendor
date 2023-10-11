@@ -60,6 +60,7 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
   ];
 
   bool isStart = false;
+  bool isStarted = false;
   bool isCompleted = false;
 
   @override
@@ -90,7 +91,7 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
       setState(() {
         Fluttertoast.showToast(msg: "${jsonResponse['message']} and OTP is ${jsonResponse['otp']}");
         //setState(() {
-          isStart = false;
+         // isStart = false;
 
       });
     }
@@ -117,6 +118,7 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
       var finalResult = await response.stream.bytesToString();
       final jsonResponse = json.decode(finalResult);
       print("checking submit response here ${jsonResponse}");
+      isStart = false ;
 
       setState(() {
         Fluttertoast.showToast(msg: "${jsonResponse['message']}");
@@ -136,6 +138,7 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
   Widget build(BuildContext context) {
     print("STATUS====>"+widget.orderResponse.data![widget.i].status.toString());
     print("INDEX====>  ${widget.i.toString()}");
+    print("INDEX===dddddd=>  ${widget.orderResponse.data![widget.i].aStatus}");
     changeStatusBarColor(AppColor().colorPrimary());
     return Scaffold(
       backgroundColor: AppColor().colorBg1(),
@@ -282,18 +285,26 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                     height: 1.52.h,
                   ),
 
-              widget.orderResponse.data![widget.i].isPaid != "0"  ?  Container(
+                Container(
                     padding: EdgeInsets.symmetric(horizontal: 12),
                     child: Column(
                       children: [
                         Row(
                           mainAxisAlignment:MainAxisAlignment.center,
                           children: [
-                            widget.orderResponse.data![widget.i].status == "Complete" ? SizedBox() :  InkWell(
+                            widget.orderResponse.data![widget.i].status == "Complete"
+                                ? SizedBox()
+                                : widget.orderResponse.data![widget.i].isPaid == "0"
+                                ? SizedBox()
+                                : isStarted || widget.orderResponse.data![widget.i].aStatus == '8'
+                                ? SizedBox()
+                                : InkWell(
                               onTap:(){
                                 sendOtp(widget.orderResponse.data![widget.i].id.toString());
+
                                 setState(() {
-                                  isStart = !isStart;
+                                  isStart = true;
+                                  isStarted = true ;
                                 });
                               },
                               child: Container(
@@ -338,7 +349,7 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                           ],
                         ),
                         SizedBox(height: 10,),
-                        isStart == true ?    TextField(
+                        isStart  ?  TextField(
                           controller: startOtpController,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
@@ -350,7 +361,7 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                           ),
                         ) : SizedBox.shrink(),
                         SizedBox(height: 10,),
-                    isStart == true ?    InkWell(
+                    isStart ?    InkWell(
                       onTap: (){
                         submitOtp(widget.orderResponse.data![widget.i].id.toString(),startOtpController,'8');
                       },
@@ -367,7 +378,7 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                     ) : SizedBox.shrink(),
                       ],
                     ),
-                  ) : SizedBox.shrink(),
+                  ) ,
                   SizedBox(
                     height: 1.52.h,
                   ),
@@ -862,7 +873,7 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                                 ),
                               )
                             : Container(),*/
-                        widget.orderResponse.data![widget.i].aStatus == "2" && widget.orderResponse.data![widget.i].isPaid == "1"
+                        widget.orderResponse.data![widget.i].aStatus == "8" && widget.orderResponse.data![widget.i].isPaid == "1"
                             ? Container(
                                 width: 69.99.w,
                                 // height: 9.46.h,
@@ -918,7 +929,8 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                     padding: EdgeInsets.symmetric(horizontal: 12),
                     child: Column(
                       children: [
-                        widget.orderResponse.data![widget.i].status == "Complete" ? MaterialButton(onPressed: ()async{
+                        widget.orderResponse.data![widget.i].status == "Complete"
+                            ? MaterialButton(onPressed: ()async{
                           final Uri url = Uri.parse( '${Apipath.BASH_URL}get_invoice/${widget.orderResponse.data![widget.i].id}');
                           print("checking url here ${url}");
                           if (await canLaunch(url.toString())) {
@@ -926,12 +938,12 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                           } else {
                             throw 'Could not launch $url';
                           }
-                        },child: Text("Download Invoice",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500,fontSize: 16),),color:AppColor.PrimaryDark,) : InkWell(
+                        },child: Text("Download Invoice",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500,fontSize: 16),),color:AppColor.PrimaryDark,)
+                            : isCompleted ? SizedBox() :InkWell(
                           onTap:(){
+                            isCompleted = true;
                             sendOtp(widget.orderResponse.data![widget.i].id.toString());
-                            setState(() {
-                              isCompleted = !isCompleted;
-                            });
+                            setState(() {});
                           },
                           child: Container(
                             height: 40,
@@ -941,11 +953,11 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                                 color: AppColor.PrimaryDark,
                                 borderRadius: BorderRadius.circular(6)
                             ),
-                            child: Text("Complete Service",style: TextStyle(color: Colors.white,fontSize: 14,fontWeight: FontWeight.w500),),
+                            child: Text("End Service",style: TextStyle(color: Colors.white,fontSize: 14,fontWeight: FontWeight.w500),),
                           ),
                         ),
                         SizedBox(height: 10,),
-                        isCompleted == true ?    TextField(
+                        /*isCompleted == true ?    TextField(
                           controller: completeOtpController,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
@@ -971,7 +983,7 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                             ),
                             child: Text("Submit OTP",style: TextStyle(color: Colors.white,fontSize: 14,fontWeight: FontWeight.w500),),
                           ),
-                        ) : SizedBox.shrink(),
+                        ) : SizedBox.shrink(),*/
                       ],
                     ),
                   ): SizedBox.shrink(),
@@ -1042,7 +1054,7 @@ class _ServiceScreenDetailsState extends State<ServiceScreenDetails> {
                     height: 3.02.h,
                   ),*/
 
-                  widget.orderResponse.data![widget.i].aStatus == "2" && widget.orderResponse.data![widget.i].isPaid == "1"
+                  widget.orderResponse.data![widget.i].aStatus == "8" && widget.orderResponse.data![widget.i].isPaid == "1"
                       ? InkWell(
                     onTap: () async {
                       if(otpController.text.isNotEmpty){

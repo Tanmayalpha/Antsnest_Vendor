@@ -1077,7 +1077,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                   ],
                                 ),
                                 Text(
-                                  "₹ " + walletHistory[index].amount.toString(),
+                                  "₹ " + walletHistory[index].finalPayout.toString(),
                                   //  ['amount'].toString(),
                                   style: TextStyle(
                                     color: walletHistory[index].creditOrDebit ==

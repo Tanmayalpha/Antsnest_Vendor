@@ -27,4 +27,10 @@ class Apipath {
   static const String i_am_online = BASH_URL + 'change_status';
   static const String get_service_profile = BASH_URL + 'get_service_profile';
   static const String update_service_profile = BASH_URL + 'update_service_profile';
+  static  String getTicketsTypeApi = BASH_URL + '/get_ticket_types_users';
+  static  String getTicketsApi = BASH_URL + '/get_tickets_users';
+  static  String editTicketApi = BASH_URL + '/edit_ticket';
+  static  String addTicketApi = BASH_URL + '/add_support_tickets_vendor';
+  static  String sendMsgApi = BASH_URL + '/send_support_message';
+  static  String getMsgApi = BASH_URL + '/get_messages';
 }

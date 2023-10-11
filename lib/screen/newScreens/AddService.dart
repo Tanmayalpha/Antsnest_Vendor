@@ -3567,11 +3567,13 @@ class _AddServicesState extends State<AddServices> {
     //   }
     // }
     // request.files.addAll(newList);
-    for (var i = 0; i < imagePathList.length; i++) {
-      imagePathList == null
-          ? null
-          : request.files.add(await http.MultipartFile.fromPath(
-              'res_image[]', imagePathList[i].toString()));
+    if(imagePathList != null) {
+      for (var i = 0; i < imagePathList.length; i++) {
+        imagePathList == null
+            ? null
+            : request.files.add(await http.MultipartFile.fromPath(
+                'res_image[]', imagePathList[i].toString()));
+      }
     }
     print(request.files);
     http.StreamedResponse response = await request.send();

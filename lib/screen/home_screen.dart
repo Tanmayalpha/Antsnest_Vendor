@@ -62,7 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getLatestPost() async {
     var vendorId = await MyToken.getUserID();
-    print("vendor id ${vendorId}");
     var headers = {'Cookie': 'ci_session=2gkq6rsuscin03924605v1edhahcke0t'};
     var request =
         http.MultipartRequest('POST', Uri.parse(BaseUrl + 'view_latest_post'));
@@ -296,9 +295,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                               shrinkWrap: true,
                                               padding: EdgeInsets.symmetric(horizontal: 12),
                                               physics: ClampingScrollPhysics(),
-                                              itemCount: model.data!.length,
+                                              itemCount: model.data?.length ?? 0,
                                               itemBuilder: (context, i) {
-                                                return InkWell(
+                                                print('___________${i}__________');
+                                                print('___________${model.data?.length}__________');
+                                                return   InkWell(
                                                   // onTap: model.data![i].acceptReject ==
                                                   //         ToastString.responseCode
                                                   //     ? () {
@@ -606,7 +607,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   //   ),
                                                   // ),
 
-                                                  Padding(
+                                                 Padding(
                                                     padding: EdgeInsets.only(bottom: 10),
                                                     child: Card(
                                                       shape: RoundedRectangleBorder(
@@ -626,10 +627,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                               children: [
                                                                 Text(
-                                                                  "${model.data![i].username}",
+                                                                  model.data?[i].username ?? '',
                                                                   style: TextStyle(color:  Color(0xff191919),fontSize: 14.sp,fontFamily: fontBold),
                                                                 ),
-                                                                Text("${model.data![i].date}")
+                                                                Text("${model.data?[i].date}")
                                                               ],
                                                             ),
                                                             SizedBox(height: 10,),
@@ -638,7 +639,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                               children: [
                                                                 Text("Service",style: TextStyle(color: Colors.black,fontSize: 15),),
-                                                                Text("${model.data![i].resName}",style: TextStyle(color: Colors.black,fontSize: 15),)
+                                                                Text("${model.data?[i].resName}",style: TextStyle(color: Colors.black,fontSize: 15),)
                                                               ],
                                                             ),
                                                             SizedBox(height: 10,),
@@ -647,7 +648,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               crossAxisAlignment: CrossAxisAlignment.center,
                                                               children: [
                                                                 Text("Price",style: TextStyle(color: Colors.black,fontSize: 15),),
-                                                                Text(" \u{20B9} ${model.data![i].total}",style: TextStyle(color: Colors.black,fontSize: 15),),
+                                                                Text(" \u{20B9} ${model.data?[i].total}",style: TextStyle(color: Colors.black,fontSize: 15),),
                                                               ],
                                                             ),
                                                             SizedBox(height: 10,),
@@ -656,7 +657,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               crossAxisAlignment: CrossAxisAlignment.center,
                                                               children: [
                                                                 Text("Status",style: TextStyle(color: Colors.black,fontSize: 15,),),
-                                                              model.data![i].isPaid == "0"  ?  Text("Unpaid",style: TextStyle(color: Colors.red,fontSize: 15),) : Text("Paid",style: TextStyle(color: Colors.green,fontSize: 15 ),)
+                                                              model.data?[i].isPaid == "0"  ?  Text("Unpaid",style: TextStyle(color: Colors.red,fontSize: 15),) : Text("Paid",style: TextStyle(color: Colors.green,fontSize: 15 ),)
                                                               ],
                                                             ),
                                                             SizedBox(height: 10,),
@@ -668,7 +669,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               children: [
                                                                 Icon(Icons.location_on_outlined),
                                                                 SizedBox(width: 10,),
-                                                                Expanded(child: Text("${model.data![i].address}"))
+                                                                Expanded(child: Text("${model.data?[i].address}"))
                                                               ],
                                                             ),
                                                             SizedBox(height: 15,),
@@ -677,13 +678,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             //
                                                             //   ],
                                                             // )
-                                                                  getAcceptRejectButton(
-                                                                      model.data![i]
-                                                                          .aStatus,
-                                                                      model.data![i].id,
+                                                            getAcceptRejectButton(value:
+                                                                      model.data?[i]
+                                                                          .aStatus,bookingId:
+                                                                      model.data?[i].id,i:
                                                                       i)
                                                           ],
-                                                        ),
+                                                        ) ,
                                                       ),
                                                     ),
                                                   )
@@ -1686,9 +1687,10 @@ class _HomeScreenState extends State<HomeScreen> {
             )));
   }
 
-  getAcceptRejectButton(value, bookingId, i) {
-    print(
-        "VALUE ===== $value &&&& BOOKING ID === $bookingId &&&& INDEX === $i");
+ Widget getAcceptRejectButton({String? value, String? bookingId, int? i}) {
+   /* print(
+        "VALUE ===== $value &&&& BOOKING ID === $bookingId &&&& INDEX === $i");*/
+    print('___________${value}_____value_____');
     switch (value) {
       case "1":
         return Container(
@@ -1802,6 +1804,20 @@ class _HomeScreenState extends State<HomeScreen> {
               bgColor: Colors.green,
             ),
             child: text("Completed"),
+          ),
+        );
+      default:
+        return InkWell(
+          onTap: () => getNewOders(i),
+          child: Container(
+            alignment: Alignment.center,
+            width: 70.w,
+            height: 5.8.h,
+            decoration: boxDecoration(
+              radius: 6.0,
+              bgColor: Colors.orangeAccent,
+            ),
+            child: text("view info"),
           ),
         );
     }

@@ -37,6 +37,8 @@ import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
+import 'CustomerSupport/customer_support_faq.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
@@ -285,6 +287,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 // tabItem(context, 2, serviceIcon, "Service History"),
                 // tabItem(context, 6, serviceProfile, "    Chat With User"),
                 tabItem(context, 8, service, "Reviews"),
+                tabItem(context, 11, support, "Customer Support"),
                 tabItem(context, 9, payment, "Availability"),
                 tabItem(context, 10, payment, "Payment History"),
                 // tabItem(context, 3, changePass, "Change Password"),
@@ -463,6 +466,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               context,
               PageTransition(
                 child: Availability(),
+                type: PageTransitionType.rightToLeft,
+                duration: Duration(milliseconds: 500),
+              ));
+        }
+        if (pos == 11) {
+          Navigator.push(
+              context,
+              PageTransition(
+                child: CustomerSupport(
+                  // walletAmount: walletAmount.toString(),
+                ),
                 type: PageTransitionType.rightToLeft,
                 duration: Duration(milliseconds: 500),
               ));

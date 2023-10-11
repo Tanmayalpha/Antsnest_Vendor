@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fixerking/screen/TicketPage.dart';
 import 'package:fixerking/screen/openImage.dart';
 import 'package:fixerking/token/app_token_data.dart';
 import 'package:fixerking/utils/colors.dart';
@@ -16,6 +15,7 @@ import 'package:sizer/sizer.dart';
 
 import '../api/api_path.dart';
 import '../modal/New models/GetChatModel.dart';
+import 'CustomerSupport/add_ticket_screen.dart';
 
 class ChatPage extends StatefulWidget {
   // final SharedPreferences prefs;
@@ -346,7 +346,7 @@ class ChatPageState extends State<ChatPage> {
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => TicketPage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => TicketPage(bookingId: widget.bookingId,)));
                   },
                   child: Icon(Icons.report_gmailerrorred,color: Colors.white,)),
             ),

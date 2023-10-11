@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MyToken {
   static Future getUserID() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var data = prefs.getString(TokenString.userid);
+    String? data = prefs.getString(TokenString.userid);
     return data;
   }
 

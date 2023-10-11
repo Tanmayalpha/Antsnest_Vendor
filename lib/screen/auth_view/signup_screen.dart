@@ -767,7 +767,6 @@ String? selectedTravel;
                         SizedBox(
                           height: 15,
                         ),
-
                         // Container(
                         //   padding: EdgeInsets.symmetric(vertical: 6),
                         //   decoration: BoxDecoration(
@@ -830,7 +829,6 @@ String? selectedTravel;
                         // SizedBox(
                         //   height: 15,
                         // ),
-
                         /*Row(
                           children: [
                             InkWell(
